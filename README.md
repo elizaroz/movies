@@ -88,17 +88,28 @@ erDiagram
 
 ```
 sql/
-  01_etl_star_schema.sql     -- staging, cleaning, transformation, star schema load
-  02_analysis_queries.sql    -- analytical queries
+  etl_star_schema.sql     -- staging, cleaning, transformation, star schema load
+  analysis_queries.sql    -- analytical queries
 README.md
 ```
 
 ## How to Run
 
 1. Create a PostgreSQL database and load the raw CSVs into staging tables (`movies`, `disney`, `netflix`, `prime`).
-2. Run `sql/01_etl_star_schema.sql`.
-3. Run `sql/02_analysis_queries.sql` for example queries.
+2. Run `sql/etl_star_schema.sql`.
+3. Run `sql/analysis_queries.sql` for example queries.
 
-## Next Steps
+## Analysis
 
-Analytical queries joining the star schema with streaming availability by title + release year, and basic aggregations (top genres, most prolific directors, platform comparisons).
+`sql/analysis_queries.sql` answers a set of questions about the dataset, from basic aggregations to multi-table comparisons:
+
+**Basic**
+- Most popular genres (by number of movies)
+- Year with the most releases
+
+**Advanced**
+- Correlation between vote count and rating — tested the hypothesis that more votes mean lower ratings; the data didn't support it (movies with 100,000+ votes had a *higher* average rating than those with fewer)
+- Highest-rated genres, excluding genres with too few movies to be meaningful
+- Directors who consistently rate above the dataset average (min. 3 movies)
+- Yearly growth in titles added across streaming platforms
+- Which streaming platform's catalog has the highest-rated movies, joining streaming data to the IMDb star schema by normalized title + release year
